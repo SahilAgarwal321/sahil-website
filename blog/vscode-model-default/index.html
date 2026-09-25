@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+    })();
+  </script>
+  <title>Setting the Default Model in the VS Code Claude Code Extension | Sahil Agarwal</title>
+
+  <!-- iMessage Preview Meta -->
+  <meta data-rh="true" property="twitter:image" content="https://www.sahil.sh/imessage-preview.png" />
+  <meta property="og:image" content="https://www.sahil.sh/imessage-preview.png" />
+  <meta data-rh="true" property="twitter:card" content="summary_large_image" />
+
+  <!-- Encoding -->
+  <meta charset="utf-8">
+
+  <!-- Design -->
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" href="/static/style.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+
+  <!-- Title/Description -->
+  <meta name="description" content="The Claude Code VS Code extension ignores the model set in settings.json and keeps defaulting to Sonnet 5. Setting ANTHROPIC_MODEL in your shell profile is what actually fixes it." />
+  <meta data-rh="true" property="twitter:description" content="The Claude Code VS Code extension ignores the model set in settings.json and keeps defaulting to Sonnet 5. Setting ANTHROPIC_MODEL in your shell profile is what actually fixes it." />
+  <meta data-rh="true" property="twitter:title" content="Setting the Default Model in the VS Code Claude Code Extension | Sahil Agarwal" />
+  <meta property="og:title" content="Setting the Default Model in the VS Code Claude Code Extension | Sahil Agarwal" />
+
+  <!-- URL -->
+  <meta data-rh="true" property="twitter:url" content="https://www.sahil.sh/blog/vscode-model-default/" />
+  <meta property="og:url" content="https://www.sahil.sh/blog/vscode-model-default/" />
+  <link rel="canonical" href="https://www.sahil.sh/blog/vscode-model-default/" />
+
+  <!-- whoami -->
+  <link href="https://www.linkedin.com/in/sahilagarwal94" rel="me" />
+  <link href="https://github.com/SahilAgarwal321" rel="me" />
+  <link href="mailto:sahil.agarwal94@gmail.com" rel="me" />
+
+  <!-- Layout (mirrors blog/index.html) -->
+  <style>
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      background: inherit;
+    }
+    .sidebar {
+      flex: 0 0 25%;
+      padding: 20px;
+    }
+    .blog-content {
+      flex: 0 0 75%;
+      padding: 20px;
+    }
+    .blog-content article {
+      font-size: 16px;
+    }
+  </style>
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Setting the Default Model in the VS Code Claude Code Extension",
+    "description": "The Claude Code VS Code extension ignores the model set in settings.json and keeps defaulting to Sonnet 5. Setting ANTHROPIC_MODEL in your shell profile is what actually fixes it.",
+    "url": "https://www.sahil.sh/blog/vscode-model-default/",
+    "datePublished": "2026-09-25",
+    "author": {
+      "@type": "Person",
+      "name": "Sahil Agarwal",
+      "url": "https://www.sahil.sh/"
+    },
+    "keywords": ["Claude Code", "VS Code", "VSCode", "model default", "ANTHROPIC_MODEL", "claude-sonnet", "settings.json"]
+  }
+  </script>
+</head>
+
+<body class="blog">
+  <div class="container">
+    <!-- Left Sidebar -->
+    <div class="sidebar">
+      <div class="about-container">
+        <div class="headshot"></div>
+        <section class="profile">
+          <h1 class="lead">Hi, I'm Sahil.</h1>
+          <p>
+            I'm a data engineer at <a href="https://h1.co/" target="_blank" rel="nofollow">H1</a> in the Data Delivery Team.
+            I make software, read, write, and I'm relearning how to play guitar and chess.
+          </p>
+          <p>
+            If you'd like to get in touch, drop me a line at
+            <a href="mailto:sahil.agarwal94@gmail.com" target="_blank" rel="nofollow">sahil.agarwal94@gmail.com</a>.
+            <br /><br />
+            <a href="https://www.linkedin.com/in/sahilagarwal94/" rel="nofollow noopener noreferrer"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i></a>
+            &nbsp;
+            <a href="https://github.com/SahilAgarwal321/" rel="nofollow noopener noreferrer" class="github"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></a>
+          </p>
+          <header>
+            <nav>
+              <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/Sahil CV - 22 Jan 2025.pdf">CV</a></li>
+              </ul>
+            </nav>
+          </header>
+        </section>
+      </div>
+    </div>
+
+    <!-- Right: Article -->
+    <div class="blog-content">
+      <article class="single">
+        <header>
+          <h1 class="article-header">Setting the Default Model in the VS Code Claude Code Extension</h1>
+          <div class="article-meta">
+            <time datetime="2026-09-25">September 25, 2026</time>
+          </div>
+        </header>
+
+        <p>
+          Spent way too long figuring out why the VS Code extension keeps defaulting to Sonnet 5
+          despite having the model set in Claude Code's settings. Here's what's going on and what
+          actually fixes it.
+        </p>
+
+        <h2>The Problem</h2>
+
+        <p>
+          The VS Code extension keeps defaulting to Sonnet 5 on every new session, even with
+          <code>"model": "claude-sonnet-4-6"</code> set in <code>~/.claude/settings.json</code>.
+          Multiple open GitHub issues on this going back to late 2025, no official fix yet.
+        </p>
+        <p>I tried all of these and none of them worked:</p>
+        <ul>
+          <li>Setting <code>"model": "claude-sonnet-4-6"</code> in <code>~/.claude/settings.json</code></li>
+          <li>Setting <code>"claudeCode.selectedModel"</code> in VS Code's own <code>settings.json</code></li>
+          <li>Using <code>claudeCode.environmentVariables</code> with <code>ANTHROPIC_MODEL</code></li>
+          <li>Changing the model via the extension's dropdown picker</li>
+        </ul>
+
+        <h2>What Worked</h2>
+
+        <p>
+          Adding the model as an environment variable directly in the shell profile. For zsh on Mac:
+        </p>
+
+<pre><code>export ANTHROPIC_MODEL=claude-sonnet-4-6</code></pre>
+
+        <p>
+          Drop that into <code>~/.zshrc</code>, run <code>source ~/.zshrc</code>, then fully quit
+          VS Code with <kbd>Cmd+Q</kbd> and reopen. The extension picks it up on launch and respects
+          it consistently.
+        </p>
+
+        <h2>Why Does This Happen?</h2>
+
+        <p>
+          The VS Code extension and the terminal <code>claude</code> command are essentially two
+          separate things, even though they're both part of Claude Code. The CLI reads from
+          <code>~/.claude/settings.json</code> correctly and respects the <code>model</code> key
+          without any issues. The VS Code extension, however, bundles its own Claude Code binary
+          and manages its model state completely independently.
+        </p>
+        <p>
+          This means that when a new session starts in the extension, it spins up its own process
+          with its own hardcoded defaults — and those defaults override whatever is set in the
+          config files. It doesn't matter how many places the model is configured, the extension's
+          internal state wins every time.
+        </p>
+        <p>
+          Setting <code>ANTHROPIC_MODEL</code> at the shell level sidesteps this entirely.
+          Environment variables get picked up at launch, before the extension's internal logic runs,
+          which is why it's the one thing that actually sticks.
+        </p>
+      </article>
+    </div>
+  </div>
+
+  <button id="theme-toggle" aria-label="Toggle theme"></button>
+  <script>
+    function updateToggle() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.getElementById('theme-toggle').innerHTML = isDark
+        ? '<i class="fa-solid fa-sun"></i>'
+        : '<i class="fa-solid fa-moon"></i>';
+    }
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateToggle();
+    });
+    updateToggle();
+  </script>
+</body>
+</html>

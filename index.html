@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    (function() {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+    })();
+  </script>
   <title>Sahil Agarwal</title>
 
   <!-- iMessage Preview Meta -->
@@ -27,6 +34,7 @@
 <!-- URL -->
 <meta data-rh="true" property="twitter:url" content="https://www.sahil.sh/" />
 <meta property="og:url" content="https://www.sahil.sh/" />
+<link rel="canonical" href="https://www.sahil.sh/" />
 
 <!-- whoami -->
 <link href="https://www.linkedin.com/in/sahilagarwal94" rel="me" />
@@ -59,5 +67,21 @@
       </nav>
     </header>
   </div>
+  <button id="theme-toggle" aria-label="Toggle theme"></button>
+  <script>
+    function updateToggle() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.getElementById('theme-toggle').innerHTML = isDark
+        ? '<i class="fa-solid fa-sun"></i>'
+        : '<i class="fa-solid fa-moon"></i>';
+    }
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateToggle();
+    });
+    updateToggle();
+  </script>
 </body>
 </html>

@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    (function() {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+    })();
+  </script>
   <title>Sahil Agarwal</title>
 
   <!-- iMessage Preview Meta -->
@@ -26,6 +33,7 @@
   <!-- URL -->
   <meta data-rh="true" property="twitter:url" content="https://www.sahil.sh/" />
   <meta property="og:url" content="https://www.sahil.sh/" />
+  <link rel="canonical" href="https://www.sahil.sh/blog/" />
 
   <!-- whoami -->
   <link href="https://www.linkedin.com/in/sahilagarwal94" rel="me" />
@@ -103,43 +111,33 @@
 
       <!-- Right Section: Blog Posts and Pagination -->
       <div class="blog-content">
-        <h2>Recent Posts <em>(WIP)</em></h2>
-        <!-- Blog Post 1 -->
+        <h2>Recent Posts</h2>
         <div class="blog-post">
-
-        <h3><a href="/blog/Hello-World/" rel="permalink">Hello, World.</a></h3>
-          <p class="blog-post-date"><em>February 2, 2025</em></p>
+          <h3><a href="/blog/vscode-model-default/" rel="permalink">Setting the Default Model in the VS Code Claude Code Extension</a></h3>
+          <p class="blog-post-date"><em>September 25, 2026</em></p>
           <p>
-            This is a short summary of the first blog post. It provides an overview of the content discussed in the post, offering insights into the topics covered.
-          </p>
-          <p></p>
-        </div>
-        <!-- Blog Post 2 -->
-        <div class="blog-post">
-          <h3><a href="/blog/Hello-World/" rel="permalink">Hello, World.</a></h3>
-          <p class="blog-post-date"><em>December 25, 2024</em></p>
-          <p>
-            This blog post explores the fundamentals of data engineering and how modern technologies are transforming the field. The post is brief but informative.
-          </p>
-        </div>
-        <!-- Blog Post 3 -->
-        <div class="blog-post">
-          <h3><a href="/blog/Hello-World/" rel="permalink">Hello, World.</a></h3>
-          <p class="blog-post-date"><em>December 10, 2024</em></p>
-          <p>
-            An overview of my recent projects and experiments. This summary touches upon challenges faced and solutions implemented throughout the process.
-          </p>
-        </div>
-        <!-- Blog Post 4 -->
-        <div class="blog-post">
-          <h3><a href="/blog/Hello-World/" rel="permalink">Hello, World.</a></h3>
-          <p class="blog-post-date"><em>November 30, 2024</em></p>
-          <p>
-            This entry provides a brief look into some interesting reads and insights from the tech world, summarizing key takeaways in a few lines.
+            The Claude Code VS Code extension has its own internal model state that doesn't reliably
+            read from <code>~/.claude/settings.json</code>. Here's what actually fixes it.
           </p>
         </div>
 
       </div>
     </div>
+  <button id="theme-toggle" aria-label="Toggle theme"></button>
+  <script>
+    function updateToggle() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.getElementById('theme-toggle').innerHTML = isDark
+        ? '<i class="fa-solid fa-sun"></i>'
+        : '<i class="fa-solid fa-moon"></i>';
+    }
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateToggle();
+    });
+    updateToggle();
+  </script>
   </body>
   </html>
